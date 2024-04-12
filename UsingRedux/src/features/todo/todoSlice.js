@@ -5,30 +5,32 @@ const initialState = {
     {
       id: 1,
       text: "Learn Redux",
+      completed: false, // Assuming default value for completed property
     },
   ],
 };
 
 export const todoSlice = createSlice({
-  name: "todo",
+  name: "todos",
   initialState,
   reducers: {
     addTodo: (state, action) => {
       const todo = {
         id: nanoid(),
         text: action.payload.text,
-        completed: false 
+        completed: action.payload.completed || false, // Default value for completed
       };
       state.todos.push(todo);
+      console.log(todo)
     },
     deleteTodo: (state, action) => {
-      state.todos = state.todos.filter((todo) => todo.id != action.payload.id);
+      state.todos = state.todos.filter((todo) => todo.id !== action.payload.id);
     },
     editTodo: (state, action) => {
       const index = state.todos.findIndex(
         (todo) => todo.id === action.payload.id
       );
-      state.todos[index] = action.payload;
+      state.todos[index].text = action.payload.text;
     },
     toggleCompleted: (state, action) => {
       const index = state.todos.findIndex(
